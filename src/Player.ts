@@ -46,7 +46,7 @@ export default class Player
         let dir = this.targetPosition.copy().sub(this.position.copy());
         let norm = dir.normalize();
 
-        if(Globals.getP5().dist(this.position.x, this.position.y, this.targetPosition.x, this.targetPosition.y) >= this.radius)
+        if(Globals.getP5().dist(this.body.position.x, this.body.position.y, this.targetPosition.x, this.targetPosition.y) >= this.radius / 2)
         {
             let velocity: Vector = norm.mult(this.speed).copy();
             Body.setVelocity(this.body, {x: velocity.x, y: velocity.y});

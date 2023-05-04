@@ -1,6 +1,7 @@
 import { World, Engine, Runner } from 'matter-js';
-import P5 from 'p5';
+import P5, { Vector } from 'p5';
 import Player from './Player';
+import Cell from './Cell';
 
 interface ScreenSize
 {
@@ -17,7 +18,7 @@ export default class Globals
     private static world: World;
     private static runner: Runner;
     private static player: Player;
-   
+    private static cells: Cell[];
 
     public static initilize(p5: P5, screenSize: ScreenSize): void
     {
@@ -32,11 +33,35 @@ export default class Globals
         Runner.run(Globals.runner,  Globals.engine);
 
         Globals.player = new Player(p5.createVector(), 40); 
+        Globals.cells = [];
     }
    
+    public static generateCells(amount: number)
+    {
+        for(let i = 0; i < amount; i++)
+        {
+            Globals.cells.push(new Cell());
+        }
+    }
+
+    public static getCells()
+    {
+        return Globals.cells;
+    }
+
     public static randomColor(): string
     {
         return Globals.colors[Math.floor(Math.random() * Globals.colors.length)];
+    }
+
+    public static randomCellRadius(): number
+    {
+        return Math.floor(Globals.getP5().random(20, 60));
+    }
+
+    public static randomPosition(): Vector
+    {
+        return Globals.getP5().createVector(Globals.getP5().random(-1000, 1000), Globals.getP5().random(-1000, 1000));
     }
 
     public static resizeScreen(screenSize: ScreenSize): void
