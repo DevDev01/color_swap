@@ -11,4 +11,9 @@ export default class PhysicsBody
 
         return body;
     }
+
+    public static remove(body: Body)
+    {
+        Composite.remove(Globals.getWorld(), body);
+    }
 }

@@ -15,7 +15,7 @@ const Game = (p5: P5) =>
         p5.createCanvas(Globals.getScreenSize().width, Globals.getScreenSize().height).parent("#root");  
         p5.rectMode(p5.CENTER);
 
-        CellManager.generateCells(100);
+        CellManager.generate(100);
     }
 
     p5.draw = () =>
@@ -30,7 +30,6 @@ const Game = (p5: P5) =>
         Canvas.circle({ x: 0, y: 0, radius: 5 }, { fill: "#000000" });
 
         //Update
-
         if(p5.mouseButton == p5.LEFT && p5.mouseIsPressed) Globals.getPlayer().setTarget(mousePosition.copy());
         Globals.getPlayer().move();
 
@@ -40,7 +39,7 @@ const Game = (p5: P5) =>
         Canvas.customCursor(mousePosition.copy(), 10, (p5.mouseButton == p5.LEFT && p5.mouseIsPressed));
         Globals.getPlayer().draw();
 
-        CellManager.drawCells();
+        CellManager.draw();
     }
 
     p5.windowResized = () => Globals.resizeScreen({width: window.innerWidth, height: window.innerHeight});

@@ -2,6 +2,9 @@ import { World, Engine, Runner, Events, IEventCollision, Body } from 'matter-js'
 import P5, { Vector } from 'p5';
 import Player from './Player';
 import Timer from './Timer';
+import { v4 as uuidv4 } from 'uuid';
+import CellManager from './CellManager';
+import Cell from './Cell';
 
 interface ScreenSize
 {
@@ -56,6 +59,11 @@ export default class Globals
         return Globals.getP5().createVector(Globals.getP5().random(-1000, 1000), Globals.getP5().random(-1000, 1000));
     }
 
+    public static generateUUID(): string
+    {
+        return uuidv4();
+    }
+
     private static handleCollision(e: IEventCollision<Engine>)
     {
         for(let pair in e.pairs)
@@ -63,20 +71,16 @@ export default class Globals
             const bodyA: Body = e.pairs[pair].bodyA;
             const bodyB: Body = e.pairs[pair].bodyB;
 
-            if(bodyA.label.includes("Player-") && bodyB.label.includes("Bubble-"))
+            if(bodyA.label.includes("Player-") && bodyB.label.includes("Cell-"))
             {
-                //let normal = e.pairs[pair].collision.normal;
-
-                let bubble: Bubble | undefined = getBubbleByLabel(bodyB.label);
-                if(bubble instanceof Bubble) player.collidedWith(bubble);
+                let cell: Cell | undefined = CellManager.getByLabel(bodyB.label);
+                if(cell instanceof Cell) Globals.getPlayer().collidedWith(cell);
             }
 
-            if(bodyA.label.includes("Bubble-") && bodyB.label.includes("Player-"))
+            if(bodyA.label.includes("Cell-") && bodyB.label.includes("Player-"))
             {
-                //let normal = e.pairs[pair].collision.normal;
-
-                let bubble: Bubble | undefined = getBubbleByLabel(bodyA.label);
-                if(bubble instanceof Bubble) player.collidedWith(bubble);
+                let cell: Cell | undefined = CellManager.getByLabel(bodyA.label);
+                if(cell instanceof Cell) Globals.getPlayer().collidedWith(cell);
             }
         } 
     }

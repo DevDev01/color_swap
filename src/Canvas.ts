@@ -6,6 +6,7 @@ interface StyleOptions
 {
     fill?: string | boolean;
     stroke?: string | boolean;
+    alpha?: number;
     strokeWeight?: number;
     shade?: number;
     dashArray?: number[];
@@ -144,14 +145,15 @@ export default class Canvas
     {
         let fill: string | boolean = style.fill || false;
         let stroke: string | boolean = style.stroke || false;
+        let alpha: number = style.alpha || 255;
         let strokeWeight: number = style.strokeWeight || 1;
         let shade: number = style.shade || 0;
         let dashArray: number[] = style.dashArray || [0, 0];
         let blur: number = style.blur || 0;
         let blurColor: string = style.blurColor || "#ffffff";
 
-        fill ? Globals.getP5().fill(Canvas.shadeHexColor(fill as string, shade)) : Globals.getP5().noFill();
-        stroke ? Globals.getP5().stroke(Canvas.shadeHexColor(stroke as string, shade)) : Globals.getP5().noStroke();
+        fill ? Globals.getP5().fill(Canvas.shadeHexColor(fill as string, shade) + alpha.toString(16)) : Globals.getP5().noFill();
+        stroke ? Globals.getP5().stroke(Canvas.shadeHexColor(stroke as string, shade) + alpha.toString(16)) : Globals.getP5().noStroke();
         Globals.getP5().strokeWeight(strokeWeight);
         Canvas.setLineDash(dashArray);
         Canvas.blur(blur, blurColor);

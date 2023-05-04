@@ -3,13 +3,15 @@ import Globals from "./Globals";
 import PhysicsBody from "./PhysicsBody";
 import { Vector } from "p5";
 import Canvas from './Canvas';
+import Cell from "./Cell";
 
 export default class Player
 {
-    private body: Body;
     private radius: number;
     private position: Vector;
     
+    private body: Body;
+    private label: string;
     private color: string;
     private targetPosition: Vector;
     private speed: number;
@@ -18,15 +20,18 @@ export default class Player
 
     constructor(position: Vector, radius: number)
     {
-        this.body = PhysicsBody.circle(position.copy(), radius, { restitution: 0.9 });
         this.radius = radius;
-        this.position = position.copy();
+        this.position = position;
 
+        this.body = PhysicsBody.circle(position, radius, { restitution: 0.9 });
+        this.label = `Player-${Globals.generateUUID()}`;
         this.color = Globals.randomColor();
-        this.targetPosition = this.position.copy();
+        this.targetPosition = position;
         this.speed = 6;
         this.showTarget = false;
         this.timerProgress = 0;
+
+        this.body.label = this.label;
     }
 
     public draw()
@@ -61,6 +66,14 @@ export default class Player
     public swap()
     {
         this.color = Globals.randomColor();
+    }
+
+    public collidedWith(cell: Cell)
+    {
+        if(cell.getColor() == this.color)
+        {
+            cell.damage(10);
+        }
     }
 
     public setTarget(position: Vector)
