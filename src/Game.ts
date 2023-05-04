@@ -1,7 +1,7 @@
 import P5, { Vector } from 'p5';
 import Globals from './Globals';
 import Canvas from './Canvas';
-import Cell from './Cell';
+import CellManager from './CellManager';
 
 const Game = (p5: P5) =>
 {
@@ -15,8 +15,7 @@ const Game = (p5: P5) =>
         p5.createCanvas(Globals.getScreenSize().width, Globals.getScreenSize().height).parent("#root");  
         p5.rectMode(p5.CENTER);
 
-        Globals.generateCells(200);
-        
+        CellManager.generateCells(100);
     }
 
     p5.draw = () =>
@@ -31,18 +30,17 @@ const Game = (p5: P5) =>
         Canvas.circle({ x: 0, y: 0, radius: 5 }, { fill: "#000000" });
 
         //Update
-        Globals.getPlayer().update();
-        
-        Globals.getCells().map((c) => c.update());
 
         if(p5.mouseButton == p5.LEFT && p5.mouseIsPressed) Globals.getPlayer().setTarget(mousePosition.copy());
         Globals.getPlayer().move();
+
+        Globals.getPlayer().setTimerProgress(Globals.getPlayerTimerTime());
 
         //Draw
         Canvas.customCursor(mousePosition.copy(), 10, (p5.mouseButton == p5.LEFT && p5.mouseIsPressed));
         Globals.getPlayer().draw();
 
-        Globals.getCells().map((c) => c.draw());
+        CellManager.drawCells();
     }
 
     p5.windowResized = () => Globals.resizeScreen({width: window.innerWidth, height: window.innerHeight});

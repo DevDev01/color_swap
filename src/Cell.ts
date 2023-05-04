@@ -28,14 +28,24 @@ export default class Cell
         this.body = PhysicsBody.circle(this.position, this.radius, { restitution: 0.9 });
     }
 
-    public update()
-    {
-        this.position = Globals.getP5().createVector(this.body.position.x, this.body.position.y);
-    }
-
     public draw()
     {
-        Canvas.circle({ position: this.position, radius: this.radius }, { fill: this.color, shade: -0.1, blur: 32, blurColor: this.color });
-        Canvas.circle({ position: this.position, radius: this.radius - 10 }, { fill: this.color }); 
+        Canvas.circle({ position: this.getPosition(), radius: this.radius }, { fill: this.color, shade: -0.1, blur: 32, blurColor: this.color });
+        Canvas.circle({ position:  this.getPosition(), radius: this.radius - 5 }, { fill: this.color }); 
+    }
+
+    public getX(): number
+    {
+        return this.body.position.x;
+    }
+
+    public getY(): number
+    {
+        return this.body.position.y;
+    }
+
+    public getPosition(): Vector
+    {
+        return Globals.getP5().createVector(this.body.position.x, this.body.position.y);
     }
 }

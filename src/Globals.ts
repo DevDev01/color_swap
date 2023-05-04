@@ -1,7 +1,7 @@
-import { World, Engine, Runner } from 'matter-js';
+import { World, Engine, Runner, Events, IEventCollision, Body } from 'matter-js';
 import P5, { Vector } from 'p5';
 import Player from './Player';
-import Cell from './Cell';
+import Timer from './Timer';
 
 interface ScreenSize
 {
@@ -18,7 +18,7 @@ export default class Globals
     private static world: World;
     private static runner: Runner;
     private static player: Player;
-    private static cells: Cell[];
+    private static playerSwapTimer: Timer;
 
     public static initilize(p5: P5, screenSize: ScreenSize): void
     {
@@ -32,23 +32,15 @@ export default class Globals
 
         Runner.run(Globals.runner,  Globals.engine);
 
-        Globals.player = new Player(p5.createVector(), 40); 
-        Globals.cells = [];
+        Globals.player = new Player(p5.createVector(), 50); 
+
+        Globals.playerSwapTimer = new Timer(1, () => 1000, () => Globals.player.swap(), true);
+        Globals.playerSwapTimer.start();
+
+        Events.on(Globals.engine, "collisionActive", (e) => Globals.handleCollision(e));
+        Events.on(Globals.engine, "collisionStart", (e) => Globals.handleCollision(e));
     }
    
-    public static generateCells(amount: number)
-    {
-        for(let i = 0; i < amount; i++)
-        {
-            Globals.cells.push(new Cell());
-        }
-    }
-
-    public static getCells()
-    {
-        return Globals.cells;
-    }
-
     public static randomColor(): string
     {
         return Globals.colors[Math.floor(Math.random() * Globals.colors.length)];
@@ -64,6 +56,31 @@ export default class Globals
         return Globals.getP5().createVector(Globals.getP5().random(-1000, 1000), Globals.getP5().random(-1000, 1000));
     }
 
+    private static handleCollision(e: IEventCollision<Engine>)
+    {
+        for(let pair in e.pairs)
+        {
+            const bodyA: Body = e.pairs[pair].bodyA;
+            const bodyB: Body = e.pairs[pair].bodyB;
+
+            if(bodyA.label.includes("Player-") && bodyB.label.includes("Bubble-"))
+            {
+                //let normal = e.pairs[pair].collision.normal;
+
+                let bubble: Bubble | undefined = getBubbleByLabel(bodyB.label);
+                if(bubble instanceof Bubble) player.collidedWith(bubble);
+            }
+
+            if(bodyA.label.includes("Bubble-") && bodyB.label.includes("Player-"))
+            {
+                //let normal = e.pairs[pair].collision.normal;
+
+                let bubble: Bubble | undefined = getBubbleByLabel(bodyA.label);
+                if(bubble instanceof Bubble) player.collidedWith(bubble);
+            }
+        } 
+    }
+
     public static resizeScreen(screenSize: ScreenSize): void
     {
         Globals.screenSize = screenSize;
@@ -75,7 +92,6 @@ export default class Globals
     {
         return Globals.p5;
     }
-
 
     public static getScreenSize(): ScreenSize
     {
@@ -90,5 +106,10 @@ export default class Globals
     public static getPlayer(): Player
     {
         return Globals.player;
+    }
+
+    public static getPlayerTimerTime()
+    {
+        return Globals.getP5().map(Globals.playerSwapTimer.getCurrentTime(), 0, Globals.playerSwapTimer.getLength(), 360, 0);
     }
 }

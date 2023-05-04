@@ -42,6 +42,12 @@ interface LineOptions
     endPosition?: Vector;
 }
 
+interface ArcOptions extends SharedOptions
+{
+    radius?: number;
+    angle?: number
+}
+
 export default class Canvas
 {
     public static background(color: string)
@@ -102,6 +108,20 @@ export default class Canvas
         Globals.getP5().push();
         Canvas.translate(Globals.getP5().createVector());
         Globals.getP5().line(startPosition.x, startPosition.y, endPosition.x, endPosition.y);
+        Globals.getP5().pop();
+    }
+
+    public static arc(options: ArcOptions, style: StyleOptions)
+    {
+        let position: Vector = Canvas.generatePosition(options);
+        let radius: number = options.radius || 0;
+        let angle: number = options.angle || 0;
+
+        Canvas.applyStyle(style);
+
+        Globals.getP5().push();
+        Canvas.translate(Globals.getP5().createVector());
+        Globals.getP5().arc(position.x, position.y, radius * 2, radius * 2, 0, Globals.getP5().radians(angle));
         Globals.getP5().pop();
     }
 
