@@ -1,4 +1,4 @@
-import P5 from 'p5';
+import P5, { Vector } from 'p5';
 import Globals from './Globals';
 import Canvas from './Canvas';
 
@@ -20,7 +20,20 @@ const Game = (p5: P5) =>
         Canvas.background("#323232");
         Canvas.translate(p5.createVector(Globals.getScreenSize().width / 2 - Globals.getPlayer().getX(), Globals.getScreenSize().height / 2 - Globals.getPlayer().getY()));
 
+        const mx: number = (p5.mouseX - Globals.getScreenSize().width / 2) + Globals.getPlayer().getX();
+        const my: number = (p5.mouseY - Globals.getScreenSize().height / 2) + Globals.getPlayer().getY();
+        const mousePosition: Vector = p5.createVector(mx, my);
+
+        Canvas.circle({ x: 0, y: 0, radius: 5 }, { fill: "#000000" });
+
+        //Update
         Globals.getPlayer().update();
+
+        if(p5.mouseButton == p5.LEFT && p5.mouseIsPressed) Globals.getPlayer().setTarget(mousePosition.copy());
+        Globals.getPlayer().move();
+
+        //Draw
+        Canvas.customCursor(mousePosition.copy(), 10, (p5.mouseButton == p5.LEFT && p5.mouseIsPressed));
         Globals.getPlayer().draw();
     }
 
