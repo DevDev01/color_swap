@@ -9,6 +9,8 @@ interface StyleOptions
     strokeWeight?: number;
     shade?: number;
     dashArray?: number[];
+    blur?: number;
+    blurColor?: string;
 }
 
 interface SharedOptions
@@ -103,6 +105,12 @@ export default class Canvas
         Globals.getP5().pop();
     }
 
+    public static shadeHexColor(color: string, percent: number): string
+    {
+        var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+        return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+    }
+
     private static generatePosition(options: SharedOptions): Vector
     {
         let x: number = options.x || 0;
@@ -119,15 +127,24 @@ export default class Canvas
         let strokeWeight: number = style.strokeWeight || 1;
         let shade: number = style.shade || 0;
         let dashArray: number[] = style.dashArray || [0, 0];
+        let blur: number = style.blur || 0;
+        let blurColor: string = style.blurColor || "#ffffff";
 
-        fill ? Globals.getP5().fill(Globals.shadeHexColor(fill as string, shade)) : Globals.getP5().noFill();
-        stroke ? Globals.getP5().stroke(Globals.shadeHexColor(stroke as string, shade)) : Globals.getP5().noStroke();
+        fill ? Globals.getP5().fill(Canvas.shadeHexColor(fill as string, shade)) : Globals.getP5().noFill();
+        stroke ? Globals.getP5().stroke(Canvas.shadeHexColor(stroke as string, shade)) : Globals.getP5().noStroke();
         Globals.getP5().strokeWeight(strokeWeight);
         Canvas.setLineDash(dashArray);
+        Canvas.blur(blur, blurColor);
     }
 
     private static setLineDash(dashArray: number[])
     {
         Globals.getP5().drawingContext.setLineDash(dashArray);
+    }
+
+    private static blur(intensity: number, color: string)
+    {
+        Globals.getP5().drawingContext.shadowBlur = intensity;
+        Globals.getP5().drawingContext.shadowColor = Globals.getP5().color(color);
     }
 }

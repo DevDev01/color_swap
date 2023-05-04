@@ -12,15 +12,18 @@ export default class Globals
 {
     private static p5: P5;
     private static screenSize: ScreenSize;
+    private static colors: string[];
     private static engine: Engine;
     private static world: World;
     private static runner: Runner;
     private static player: Player;
+   
 
     public static initilize(p5: P5, screenSize: ScreenSize): void
     {
         Globals.p5 = p5;
         Globals.screenSize = screenSize;
+        Globals.colors = ["#2ecc71", "#3498db", "#9b59b6", "#2c3e50", "#f1c40f", "#e67e22", "#e74c3c", "#ff7979", "#3c40c6"];
 
         Globals.engine = Engine.create({gravity: {x: 0, y: 0}});
         Globals.world = Globals.engine.world;
@@ -28,13 +31,12 @@ export default class Globals
 
         Runner.run(Globals.runner,  Globals.engine);
 
-        Globals.player = new Player(p5.createVector(), 50);
+        Globals.player = new Player(p5.createVector(), 40); 
     }
    
-    public static shadeHexColor(color: string, percent: number): string
+    public static randomColor(): string
     {
-        var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
-        return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+        return Globals.colors[Math.floor(Math.random() * Globals.colors.length)];
     }
 
     public static resizeScreen(screenSize: ScreenSize): void

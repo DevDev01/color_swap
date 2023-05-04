@@ -10,6 +10,7 @@ export default class Player
     private radius: number;
     private position: Vector;
     
+    private color: string;
     private targetPosition: Vector;
     private speed: number;
     private showTarget: boolean;
@@ -20,6 +21,7 @@ export default class Player
         this.radius = radius;
         this.position = Globals.getP5().createVector(this.body.position.x, this.body.position.y);
 
+        this.color = Globals.randomColor();
         this.targetPosition = this.position.copy();
         this.speed = 6;
         this.showTarget = false;
@@ -32,11 +34,11 @@ export default class Player
 
     public draw()
     {
-        if(this.showTarget) Canvas.line({ startPosition: this.position, endPosition: this.targetPosition }, { stroke: "#e74c3c", strokeWeight: 5, dashArray: [10, 10] });
-        if(this.showTarget) Canvas.circle({ position: this.targetPosition, radius: 10 }, { fill:  "#e74c3c", shade: -0.1 });
+        if(this.showTarget) Canvas.line({ startPosition: this.position, endPosition: this.targetPosition }, { stroke: this.color, strokeWeight: 5, dashArray: [10, 10] });
+        if(this.showTarget) Canvas.circle({ position: this.targetPosition, radius: 10 }, { fill:  this.color, shade: -0.1 });
 
-        Canvas.circle({ position: this.position, radius: this.radius }, { fill: "#e74c3c", shade: -0.1 });
-        Canvas.circle({ position: this.position, radius: this.radius - 10 }, { fill: "#e74c3c" });  
+        Canvas.circle({ position: this.position, radius: this.radius }, { fill: this.color, shade: -0.1, blur: 32, blurColor: this.color });
+        Canvas.circle({ position: this.position, radius: this.radius - 10 }, { fill: this.color });  
     }
 
     public move()
