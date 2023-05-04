@@ -35,6 +35,11 @@ export default class Canvas
         Globals.getP5().background(color);
     }
 
+    public static translate(position: Vector)
+    {
+        Globals.getP5().translate(position.x, position.y);
+    }
+
     public static rect(options: RectOptions, style: StyleOptions): void
     {
         let position: Vector = Canvas.generatePosition(options);

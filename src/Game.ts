@@ -11,16 +11,19 @@ const Game = (p5: P5) =>
 
     p5.setup = () =>
     {
-        p5.createCanvas(Globals.getScreenSize().width,Globals.getScreenSize().height).parent("#root");  
+        p5.createCanvas(Globals.getScreenSize().width, Globals.getScreenSize().height).parent("#root");  
         p5.rectMode(p5.CENTER);
     }
 
     p5.draw = () =>
     {
-        p5.background(50);
-        Canvas.rect({ position: p5.createVector(0, 200), width: 100, height: 100 }, { fill: "#ffffff" });
+        Canvas.background("#323232");
+        Canvas.translate(p5.createVector(Globals.getScreenSize().width / 2 - Globals.getPlayer().getX(), Globals.getScreenSize().height / 2 - Globals.getPlayer().getY()));
+
+        Globals.getPlayer().update();
+        Globals.getPlayer().draw();
     }
-    
+
     p5.windowResized = () => Globals.resizeScreen({width: window.innerWidth, height: window.innerHeight});
 }
 
