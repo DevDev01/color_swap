@@ -1,7 +1,2 @@
-# Tauri + Vanilla TS
-
-This template should help get you started developing with Tauri in vanilla HTML, CSS and Typescript.
-
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+# Info
+Color Swap is a web based game for desktop built using tauri. The goal of the game is to move the player around the world to collect "Bubbles" which will allow you to gain points and money. Using the money you have collect will allow you to purchase upgrades to further develop your player's skill. Around the map there are also "powerups" which will give skils a certain boost in there effectiveness over a short period of time.
