@@ -20,7 +20,7 @@ export default class Wall
         this.width = width;
         this.height = height;
 
-        this.body = PhysicsBody.rect(position, width, height, { isStatic: true, angle: Globals.getP5().radians(90) });
+        this.body = PhysicsBody.rect(position, width, height, { isStatic: true });
         this.label = `Wall-${Globals.generateUUID()}`;
         this.color = "#282828";
 

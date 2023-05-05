@@ -7,7 +7,6 @@ import Cell from "./Cell";
 
 export default class Player
 {
-    private position: Vector;
     private radius: number;
     
     private body: Body;
@@ -22,7 +21,6 @@ export default class Player
     constructor(position: Vector, radius: number)
     {
         this.radius = radius;
-        this.position = position;
 
         this.body = PhysicsBody.circle(position, radius, { restitution: 0.9 });
         this.label = `Player-${Globals.generateUUID()}`;

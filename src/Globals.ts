@@ -22,6 +22,8 @@ export interface BaseOptions
 
 export class Globals
 {
+    public static readonly WORLD_SIZE: number = 3000;
+
     private static p5: P5;
     private static screenSize: ScreenSize;
     private static colors: string[];
@@ -64,7 +66,7 @@ export class Globals
 
     public static randomPosition(): Vector
     {
-        return Globals.getP5().createVector(Globals.getP5().random(-1000, 1000), Globals.getP5().random(-1000, 1000));
+        return Globals.getP5().createVector(Globals.getP5().random(-Globals.WORLD_SIZE, Globals.WORLD_SIZE), Globals.getP5().random(-Globals.WORLD_SIZE, Globals.WORLD_SIZE));
     }
 
     public static generateUUID(): string
