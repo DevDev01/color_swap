@@ -1,5 +1,5 @@
 import { Vector } from "p5";
-import Globals from "./Globals";
+import { Globals, BaseOptions } from "./Globals";
 
 
 interface StyleOptions
@@ -14,21 +14,14 @@ interface StyleOptions
     blurColor?: string;
 }
 
-interface SharedOptions
-{
-    x?: number;
-    y?: number;
-    position?: Vector;
-}
-
-interface RectOptions extends SharedOptions
+interface RectOptions extends BaseOptions
 {
     width?: number;
     height?: number;
     cornerRadius?: number;
 }
 
-interface CircleOptions extends SharedOptions
+interface CircleOptions extends BaseOptions
 {
     radius?: number;
 }
@@ -43,13 +36,19 @@ interface LineOptions
     endPosition?: Vector;
 }
 
-interface ArcOptions extends SharedOptions
+interface ArcOptions extends BaseOptions
 {
     radius?: number;
     angle?: number
 }
 
-export default class Canvas
+interface TextOptions extends BaseOptions
+{
+    text?: string;
+    size?: number;
+}
+
+export class Canvas
 {
     public static background(color: string)
     {
@@ -69,7 +68,8 @@ export default class Canvas
 
     public static rect(options: RectOptions, style: StyleOptions): void
     {
-        let position: Vector = Canvas.generatePosition(options);
+        let position: Vector = Globals.getOptionsPosition(options);
+        let rotation: number = options.rotation || 0;
         let width: number = options.width || 0;
         let height: number = options.height || 0;
         let cornerRadius: number = options.cornerRadius || 0;
@@ -77,21 +77,24 @@ export default class Canvas
         Canvas.applyStyle(style);
 
         Globals.getP5().push();
-        Canvas.translate(Globals.getP5().createVector());
-        Globals.getP5().rect(position.x, position.y, width, height, cornerRadius);
+        Canvas.translate(position);
+        Globals.getP5().rotate(rotation);
+        Globals.getP5().rect(0, 0, width, height, cornerRadius);
         Globals.getP5().pop();
     }
 
     public static circle(options: CircleOptions, style: StyleOptions)
     {
-        let position: Vector = Canvas.generatePosition(options);
+        let position: Vector = Globals.getOptionsPosition(options);
+        let rotation: number = options.rotation || 0;
         let radius: number = options.radius || 0;
 
         Canvas.applyStyle(style);
 
         Globals.getP5().push();
-        Canvas.translate(Globals.getP5().createVector());
-        Globals.getP5().ellipse(position.x, position.y, radius * 2, radius * 2);
+        Canvas.translate(position);
+        Globals.getP5().rotate(rotation);
+        Globals.getP5().ellipse(0, 0, radius * 2, radius * 2);
         Globals.getP5().pop();
     }
 
@@ -114,7 +117,7 @@ export default class Canvas
 
     public static arc(options: ArcOptions, style: StyleOptions)
     {
-        let position: Vector = Canvas.generatePosition(options);
+        let position: Vector = Globals.getOptionsPosition(options);
         let radius: number = options.radius || 0;
         let angle: number = options.angle || 0;
 
@@ -126,19 +129,25 @@ export default class Canvas
         Globals.getP5().pop();
     }
 
+    public static text(options: TextOptions, style: StyleOptions)
+    {
+        let position: Vector = Globals.getOptionsPosition(options);
+        let text: string = options.text || "";
+        let size: number = options.size || 12;
+
+        Canvas.applyStyle(style);
+
+        Globals.getP5().push();
+        Canvas.translate(Globals.getP5().createVector());
+        Globals.getP5().textSize(size);
+        Globals.getP5().text(text, position.x, position.y);
+        Globals.getP5().pop();
+    }
+
     public static shadeHexColor(color: string, percent: number): string
     {
         var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
         return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
-    }
-
-    private static generatePosition(options: SharedOptions): Vector
-    {
-        let x: number = options.x || 0;
-        let y: number = options.y || 0;
-        let position: Vector = options.position || Globals.getP5().createVector(x, y);
-
-        return position;
     }
 
     private static applyStyle(style: StyleOptions)

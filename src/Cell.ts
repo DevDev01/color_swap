@@ -1,8 +1,8 @@
 import { Vector } from "p5";
-import Globals from "./Globals";
+import { Globals } from "./Globals";
 import { Body } from "matter-js";
 import PhysicsBody from "./PhysicsBody";
-import Canvas from "./Canvas";
+import { Canvas } from "./Canvas";
 import CellManager from "./CellManager";
 
 interface CellOptions
@@ -82,6 +82,7 @@ export default class Cell
             }
         }
         CellManager.remove(this);
+        Globals.getPlayer().addScore(1);
     }
 
     public getX(): number

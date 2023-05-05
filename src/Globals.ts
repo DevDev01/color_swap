@@ -12,7 +12,15 @@ interface ScreenSize
     height: number;
 }
 
-export default class Globals
+export interface BaseOptions
+{
+    x?: number;
+    y?: number;
+    position?: Vector;
+    rotation?: number;
+}
+
+export class Globals
 {
     private static p5: P5;
     private static screenSize: ScreenSize;
@@ -62,6 +70,15 @@ export default class Globals
     public static generateUUID(): string
     {
         return uuidv4();
+    }
+
+    public static getOptionsPosition(options: BaseOptions): Vector
+    {
+        let x: number = options.x || 0;
+        let y: number = options.y || 0;
+        let position: Vector = options.position || Globals.getP5().createVector(x, y);
+
+        return position;
     }
 
     private static handleCollision(e: IEventCollision<Engine>)

@@ -1,10 +1,14 @@
 import P5, { Vector } from 'p5';
-import Globals from './Globals';
-import Canvas from './Canvas';
+import { Globals } from './Globals';
+import { Canvas } from './Canvas';
 import CellManager from './CellManager';
+import Wall from './Wall';
+import UI from './UI';
+import Player from './Player';
 
 const Game = (p5: P5) =>
 {
+    let wall: Wall;
     p5.preload = () =>
     {
         Globals.initilize(p5, {width: window.innerWidth, height: window.innerHeight});
@@ -16,6 +20,8 @@ const Game = (p5: P5) =>
         p5.rectMode(p5.CENTER);
 
         CellManager.generate(100);
+
+        wall = new Wall(p5.createVector(200, 200), 200, 10);
     }
 
     p5.draw = () =>
@@ -35,11 +41,17 @@ const Game = (p5: P5) =>
 
         Globals.getPlayer().setTimerProgress(Globals.getPlayerTimerTime());
 
+        UI.attach(Globals.getPlayer().getPosition().copy());
+
         //Draw
+        wall.draw();
+
         Canvas.customCursor(mousePosition.copy(), 10, (p5.mouseButton == p5.LEFT && p5.mouseIsPressed));
         Globals.getPlayer().draw();
 
         CellManager.draw();
+
+        UI.label({ x: 0, y: -Globals.getScreenSize().height / 2 + 20, text: "Score: " + Globals.getPlayer().getScore(), size: 35, padding: 10 });
     }
 
     p5.windowResized = () => Globals.resizeScreen({width: window.innerWidth, height: window.innerHeight});

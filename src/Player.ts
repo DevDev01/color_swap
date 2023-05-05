@@ -1,14 +1,14 @@
 import { Body } from "matter-js";
-import Globals from "./Globals";
+import { Globals } from "./Globals";
 import PhysicsBody from "./PhysicsBody";
 import { Vector } from "p5";
-import Canvas from './Canvas';
+import { Canvas } from './Canvas';
 import Cell from "./Cell";
 
 export default class Player
 {
-    private radius: number;
     private position: Vector;
+    private radius: number;
     
     private body: Body;
     private label: string;
@@ -17,6 +17,7 @@ export default class Player
     private speed: number;
     private showTarget: boolean;
     private timerProgress: number;
+    private score: number;
 
     constructor(position: Vector, radius: number)
     {
@@ -30,8 +31,11 @@ export default class Player
         this.speed = 6;
         this.showTarget = false;
         this.timerProgress = 0;
+        this.score = 0;
 
         this.body.label = this.label;
+
+        console.log(this.body);
     }
 
     public draw()
@@ -76,6 +80,11 @@ export default class Player
         }
     }
 
+    public addScore(score: number)
+    {
+        this.score += score;
+    }
+
     public setTarget(position: Vector)
     {
         this.targetPosition = position;
@@ -99,5 +108,10 @@ export default class Player
     public getPosition(): Vector
     {
         return Globals.getP5().createVector(this.body.position.x, this.body.position.y);
+    }
+
+    public getScore(): number
+    {
+        return this.score;
     }
 }
