@@ -54,7 +54,7 @@ const Game = (p5: P5) =>
 
         CellManager.draw();
 
-        UI.label({ x: -Globals.getScreenSize().width / 2 + 20, y: -Globals.getScreenSize().height / 2 + 20, text: "FPS: " + Globals.getP5().frameRate().toFixed(0), size: 35, padding: 10 });
+        UI.label({ x: -Globals.getScreenSize().width / 2 + 20, y: -Globals.getScreenSize().height / 2 + 20, text: "FPS: " + Globals.getP5().frameRate().toFixed(0), size: 15, padding: 10 });
         UI.label({ x: 0, y: -Globals.getScreenSize().height / 2 + 20, text: "Score: " + Globals.getPlayer().getScore(), size: 35, padding: 10 });
     }
 

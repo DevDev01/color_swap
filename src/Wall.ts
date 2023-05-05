@@ -6,7 +6,6 @@ import { Canvas } from "./Canvas";
 
 export default class Wall
 {
-    private position: Vector;
     private width: number;
     private height: number;
 
@@ -16,7 +15,6 @@ export default class Wall
     
     constructor(position: Vector, width: number, height: number)
     {
-        this.position = position;
         this.width = width;
         this.height = height;
 
