@@ -20,7 +20,7 @@ export default class Particle
         this.position = position;
         this.color = color;
 
-        this.direction = Vector.random2D();
+        this.direction = Globals.random2D();
         this.radius = Globals.getP5().random(2, 8);
         this.lifeTime = Math.floor(Globals.getP5().random(50, 100));
         this.lifeTimer = new Timer(1, () => this.lifeTime, () => this.run.call(this));

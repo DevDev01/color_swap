@@ -194,4 +194,14 @@ export class Globals
     {
         return Globals.getP5().map(Globals.playerSwapTimer.getCurrentTime(), 0, Globals.playerSwapTimer.getLength(), 360, 0);
     }
+    
+    public static random2D() 
+    {
+        return this.fromAngle(Math.random() * Globals.getP5().TWO_PI);
+    }
+    
+    public static fromAngle(angle: number, length: number = 1) 
+    {
+        return Globals.getP5().createVector(length * Math.cos(angle), length * Math.sin(angle), 0);
+    }
 }
