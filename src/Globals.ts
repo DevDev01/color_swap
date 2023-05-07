@@ -12,6 +12,14 @@ interface ScreenSize
     height: number;
 }
 
+interface Segment
+{
+    x: number;
+    y: number;
+    length: number;
+    angle: number;
+}
+
 export interface BaseOptions
 {
     x?: number;
@@ -22,8 +30,6 @@ export interface BaseOptions
 
 export class Globals
 {
-    public static readonly WORLD_SIZE: number = 3000;
-
     private static p5: P5;
     private static screenSize: ScreenSize;
     private static colors: string[];
@@ -47,7 +53,7 @@ export class Globals
 
         Globals.player = new Player(p5.createVector(), 50); 
 
-        Globals.playerSwapTimer = new Timer(1, () => 1000, () => Globals.player.swap(), true);
+        Globals.playerSwapTimer = new Timer(1, () => 3000, () => Globals.player.swap(), true);
         Globals.playerSwapTimer.start();
 
         Events.on(Globals.engine, "collisionActive", (e) => Globals.handleCollision(e));
@@ -64,14 +70,67 @@ export class Globals
         return Math.floor(Globals.getP5().random(20, 60));
     }
 
-    public static randomPosition(): Vector
+    public static randomPointCircle(center: Vector, radius: number): Vector
     {
-        return Globals.getP5().createVector(Globals.getP5().random(-Globals.WORLD_SIZE, Globals.WORLD_SIZE), Globals.getP5().random(-Globals.WORLD_SIZE, Globals.WORLD_SIZE));
+        let r: number = radius * Math.sqrt(Math.random());
+        let theta: number = Math.random() * 2 * Globals.getP5().PI;
+
+        let x: number = center.x + r * Math.cos(theta);
+        let y: number = center.y + r * Math.sin(theta);
+
+        return Globals.getP5().createVector(x, y);
+    }
+
+    public static randomDirection(center: Vector, radius: number): Vector
+    {
+        let r: number = radius * Math.sqrt(Math.random());
+        let theta: number = Math.random() * Globals.getP5().PI;
+
+        let x: number = center.copy().x + r * Math.cos(theta);
+        let y: number = center.copy().y + r * Math.sin(theta);
+
+        return Globals.getP5().createVector(x, y).normalize();
     }
 
     public static generateUUID(): string
     {
         return uuidv4();
+    }
+
+    public static polygonSegements(center: Vector, n: number, radius: number): Segment[]
+    {
+        let segments: Segment[] = [];
+        let vertices: Vector[] = [];
+
+        if(!(n >= 3)) return [];
+
+        for(let a = 0; a < 360; a += (360 / n))
+        {
+            let x = center.x + radius * Math.cos(Globals.getP5().radians(a));
+            let y = center.y + radius * Math.sin(Globals.getP5().radians(a));
+
+            vertices.push(Globals.getP5().createVector(x, y));
+        }
+        vertices.push(vertices[0]);
+
+        for(let i = 0; i < vertices.length - 1; i++)
+        {
+            let x1 = vertices[i].x;
+            let y1 = vertices[i].y;
+            let x2 = vertices[i + 1].x;
+            let y2 = vertices[i + 1].y;
+            
+            let x = (x1 + x2) / 2;
+            let y = (y1 + y2) / 2;
+
+            let slope = (y2 - y1) / (x2 - x1);
+            let angle = Math.atan(slope) + Globals.getP5().radians(180);
+
+            segments.push({ x, y, angle, length: Globals.getP5().dist(x1, y1, x2, y2)});
+        }
+
+
+        return segments;
     }
 
     public static getOptionsPosition(options: BaseOptions): Vector

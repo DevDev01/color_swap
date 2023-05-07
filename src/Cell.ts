@@ -4,6 +4,8 @@ import { Body } from "matter-js";
 import PhysicsBody from "./PhysicsBody";
 import { Canvas } from "./Canvas";
 import CellManager from "./CellManager";
+import Particle from "./Particle";
+import GameManager from "./GameManager";
 
 interface CellOptions
 {
@@ -28,10 +30,10 @@ export default class Cell
     
     constructor(options: CellOptions = {})
     {
-        this.position = options.position || Globals.randomPosition();
+        this.position = options.position || Globals.getP5().createVector();
         this.radius = options.radius || Globals.randomCellRadius();
         this.color = options.color || Globals.randomColor();
-        this.canSplit = options.canSplit || true;
+        this.canSplit = options.canSplit == undefined ? true : options.canSplit;
 
         this.body = PhysicsBody.circle(this.position, this.radius, { restitution: 0.9 });
         this.label = `Cell-${Globals.generateUUID()}`;
@@ -44,7 +46,7 @@ export default class Cell
 
     public draw()
     {
-        Canvas.circle({ position: this.getPosition(), radius: this.radius }, { fill: this.color, shade: -0.1, blur: 32, blurColor: this.color });
+        Canvas.circle({ position: this.getPosition(), radius: this.radius }, { fill: this.color, shade: -0.1, blur: 24, blurColor: this.color });
         Canvas.circle({ position: this.getPosition(), radius: this.radius - 5 }, { fill: this.color }); 
 
         if(this.showHealth) Canvas.rect({ x: this.getX(), y: this.getY() - (this.radius + 10), width: 75, height: 5, cornerRadius: 5}, { fill: "#464646", alpha: 200 });
@@ -71,18 +73,26 @@ export default class Cell
 
     private explode()
     {
-        PhysicsBody.remove(this.body)
+        PhysicsBody.remove(this.body);
         if(this.canSplit)
         {
             for(let i = 0; i < 2; i++)
             {
-                let canSplit = (this.radius * 0.8) > 20 ? true : false;
-                let cell: Cell = new Cell({position: this.getPosition(), radius: this.radius * 0.8, color: this.color, canSplit});
-                CellManager.add(cell)
+                let canSplit = (this.radius * 0.6) > 20 ? true : false;
+                let cell: Cell = new Cell({position: this.getPosition(), radius: this.radius * 0.6, color: this.color, canSplit: canSplit});
+                CellManager.add(cell);
             }
         }
         CellManager.remove(this);
         Globals.getPlayer().addScore(1);
+        
+        if(!this.canSplit)
+        {
+            for(let i = 0; i < 20; i++)
+            {
+                GameManager.addParticle(new Particle(this.getPosition(), this.color));
+            }
+        } 
     }
 
     public getX(): number

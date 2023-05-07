@@ -8,17 +8,19 @@ export default class Wall
 {
     private width: number;
     private height: number;
+    private rotation: number;
 
     private body: Body;
     private label: string;
     private color: string;
     
-    constructor(position: Vector, width: number, height: number)
+    constructor(position: Vector, width: number, height: number, rotation: number)
     {
         this.width = width;
         this.height = height;
+        this.rotation = rotation;
 
-        this.body = PhysicsBody.rect(position, width, height, { isStatic: true });
+        this.body = PhysicsBody.rect(position, width, height, { isStatic: true, angle: rotation });
         this.label = `Wall-${Globals.generateUUID()}`;
         this.color = "#282828";
 
