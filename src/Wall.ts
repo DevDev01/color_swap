@@ -8,7 +8,6 @@ export default class Wall
 {
     private width: number;
     private height: number;
-    private rotation: number;
 
     private body: Body;
     private label: string;
@@ -18,7 +17,6 @@ export default class Wall
     {
         this.width = width;
         this.height = height;
-        this.rotation = rotation;
 
         this.body = PhysicsBody.rect(position, width, height, { isStatic: true, angle: rotation });
         this.label = `Wall-${Globals.generateUUID()}`;

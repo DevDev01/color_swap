@@ -49,10 +49,12 @@ export default class Player
 
     public move()
     {
+        let d = Globals.getP5().dist(this.getPosition().x, this.getPosition().y, this.targetPosition.x, this.targetPosition.y);
+        //this.speed = Globals.getP5().map(d, this.radius, Globals.getP5().width / 4, 4, 8);
         let dir = this.targetPosition.copy().sub(this.getPosition().copy());
         let norm = dir.normalize();
 
-        if(Globals.getP5().dist(this.getPosition().x, this.getPosition().y, this.targetPosition.x, this.targetPosition.y) >= this.radius)
+        if(d >= this.radius)
         {
             let velocity: Vector = norm.mult(this.speed).copy();
             Body.setVelocity(this.body, {x: velocity.x, y: velocity.y});

@@ -170,6 +170,12 @@ export class Globals
         Globals.getP5().resizeCanvas(screenSize.width, screenSize.height);
     }
 
+    public static mean(numbers: number[])
+    {
+        let sum = numbers.reduce((p, c) =>  p += c);
+        return sum / numbers.length;
+    }
+
     public static getP5(): P5
     {
         return Globals.p5;

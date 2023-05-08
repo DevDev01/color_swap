@@ -138,9 +138,9 @@ export class Canvas
         Canvas.applyStyle(style);
 
         Globals.getP5().push();
-        Canvas.translate(Globals.getP5().createVector());
+        Canvas.translate(Globals.getP5().createVector(position.x, position.y));
         Globals.getP5().textSize(size);
-        Globals.getP5().text(text, position.x, position.y);
+        Globals.getP5().text(text, 0, 0);
         Globals.getP5().pop();
     }
 

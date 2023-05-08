@@ -54,8 +54,12 @@ const Game = (p5: P5) =>
         Globals.getPlayer().draw();
 
         //User Interface
-        UI.label({ x: -Globals.getScreenSize().width / 2 + 20, y: -Globals.getScreenSize().height / 2 + 20, text: "FPS: " + Globals.getP5().frameRate().toFixed(0), size: 15, padding: 10 });
-        UI.label({ x: 0, y: -Globals.getScreenSize().height / 2 + 20, text: "Score: " + Globals.getPlayer().getScore(), size: 35, padding: 10 });
+        //Canvas.text({ x: Globals.getPlayer().getX() - Globals.getScreenSize().width / 2, y: Globals.getPlayer().getY(), text: "Created By DevDev" }, { fill: "#ffffff" })
+
+
+        UI.label({ x: Globals.getScreenSize().width / 2, y: 10, text: "Score: " + Globals.getPlayer().getScore(), size: 35, centeredX: true });
+        UI.label({ x: 10, y: 10, text: "FPS: " + Globals.getP5().frameRate().toFixed(0), size: 12 });
+        UI.label({ x: 10, y: Globals.getScreenSize().height - 10, text: "Created By DevDev", size: 12, centeredY: true });
     }
 
     p5.windowResized = () => Globals.resizeScreen({width: window.innerWidth, height: window.innerHeight});

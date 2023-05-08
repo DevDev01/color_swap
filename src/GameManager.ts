@@ -4,8 +4,8 @@ import WallManager from "./WallManager";
 
 export default class GameManager
 {
-    private static readonly WORLD_SIZE: number = 6000;
-    private static readonly NUMBER_SIDES: number = 100;
+    private static readonly WORLD_SIZE: number = 4000;
+    private static readonly NUMBER_SIDES: number = 10;
     private static readonly CELL_AMOUNT: number = 150;
 
     private static PARTICLE_POOL: Particle[] = [];
