@@ -176,6 +176,11 @@ export class Globals
         return sum / numbers.length;
     }
 
+    public static clamp(num: number, min: number, max: number): number
+    {
+        return Math.min(Math.max(num, min), max);
+    }
+
     public static getP5(): P5
     {
         return Globals.p5;

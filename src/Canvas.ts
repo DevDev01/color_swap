@@ -48,6 +48,11 @@ interface TextOptions extends BaseOptions
     size?: number;
 }
 
+interface TriangleOptions extends BaseOptions
+{
+    length?: number;
+}
+
 export class Canvas
 {
     public static background(color: string)
@@ -127,6 +132,33 @@ export class Canvas
         Canvas.translate(Globals.getP5().createVector());
         Globals.getP5().arc(position.x, position.y, radius * 2, radius * 2, 0, Globals.getP5().radians(angle));
         Globals.getP5().pop();
+    }
+
+    public static triangle(options: TriangleOptions, style: StyleOptions)
+    {
+        let position: Vector = Globals.getOptionsPosition(options);
+        let rotation: number = options.rotation || 0;
+        let length: number = options.length || 0;
+
+        let x1 = 0;
+        let y1 = -length / 2;
+
+        let x2 = length / 2;
+        let y2 = length / 2;
+
+        let x3 = -length / 2;
+        let y3 = length / 2;
+
+        let cx = (x1 + x2 + x3) / 3;
+        let cy = (y1 + y2 + y3) / 3;
+
+        Canvas.applyStyle(style);
+
+        Globals.getP5().push();
+        Canvas.translate(Globals.getP5().createVector(position.x + cx, position.y - cy));
+        Globals.getP5().rotate(rotation);
+        Globals.getP5().triangle(x1, y1, x2, y2, x3, y3);
+        Globals.getP5().pop();      
     }
 
     public static text(options: TextOptions, style: StyleOptions)

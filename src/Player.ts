@@ -4,6 +4,9 @@ import PhysicsBody from "./PhysicsBody";
 import { Vector } from "p5";
 import { Canvas } from './Canvas';
 import Cell from "./Cell";
+import UI from "./UI";
+import Collision from "./Collision";
+import GameManager from "./GameManager";
 
 export default class Player
 {
@@ -36,6 +39,11 @@ export default class Player
         console.log(this.body);
     }
 
+    public update()
+    {
+        console.log()
+    }
+
     public draw()
     {
         if(this.showTarget) Canvas.line({ startPosition: this.getPosition(), endPosition: this.targetPosition }, { stroke: this.color, strokeWeight: 5, dashArray: [10, 10] });
@@ -45,12 +53,15 @@ export default class Player
         Canvas.circle({ position: this.getPosition(), radius: this.radius - 10 }, { fill: this.color });  
 
         Canvas.arc({ position: this.getPosition(), radius: this.radius, angle: this.timerProgress }, { stroke: this.color, strokeWeight: 4 });
+        
+        Canvas.circle({ position: this.getPosition(), radius: this.radius + 100 }, { stroke: this.color });
     }
 
     public move()
     {
+        let slowSpeed = Collision.pointWithinCircle(GameManager.getMouseX(), GameManager.getMouseY(), this.getX(), this.getY(), this.radius + 100);
+        this.speed = slowSpeed ? 3 : 6;
         let d = Globals.getP5().dist(this.getPosition().x, this.getPosition().y, this.targetPosition.x, this.targetPosition.y);
-        //this.speed = Globals.getP5().map(d, this.radius, Globals.getP5().width / 4, 4, 8);
         let dir = this.targetPosition.copy().sub(this.getPosition().copy());
         let norm = dir.normalize();
 
@@ -113,5 +124,10 @@ export default class Player
     public getScore(): number
     {
         return this.score;
+    }
+
+    public getColor(): string
+    {
+        return this.color;
     }
 }

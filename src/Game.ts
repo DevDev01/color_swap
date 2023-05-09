@@ -52,7 +52,10 @@ const Game = (p5: P5) =>
         Canvas.customCursor(mousePosition.copy(), 10, (p5.mouseButton == p5.LEFT && p5.mouseIsPressed));
 
         Globals.getPlayer().draw();
+        let a = p5.radians(90) + Math.atan2(GameManager.getMouseY() - Globals.getPlayer().getY(), GameManager.getMouseX() - Globals.getPlayer().getX())
 
+        Canvas.triangle({ rotation: a, x: Globals.getPlayer().getX(), y: Globals.getPlayer().getY(), length: 50 }, { fill: Globals.getPlayer().getColor(), shade: -0.1 });
+        Canvas.circle({ x: Globals.getPlayer().getX(), y: Globals.getPlayer().getY(), radius: 2 }, { fill: "#ffffff" });
         //User Interface
         //Canvas.text({ x: Globals.getPlayer().getX() - Globals.getScreenSize().width / 2, y: Globals.getPlayer().getY(), text: "Created By DevDev" }, { fill: "#ffffff" })
 
